@@ -1,5 +1,6 @@
 import random
 import streamlit as st
+from logic_utils import new_game_state, check_guess
 
 def get_range_for_difficulty(difficulty: str):
     if difficulty == "Easy":
@@ -28,23 +29,6 @@ def parse_guess(raw: str):
 
     return True, value, None
 
-
-def check_guess(guess, secret):
-    if guess == secret:
-        return "Win", "🎉 Correct!"
-
-    try:
-        if guess > secret:
-            return "Too High", "📈 Go HIGHER!"
-        else:
-            return "Too Low", "📉 Go LOWER!"
-    except TypeError:
-        g = str(guess)
-        if g == secret:
-            return "Win", "🎉 Correct!"
-        if g > secret:
-            return "Too High", "📈 Go HIGHER!"
-        return "Too Low", "📉 Go LOWER!"
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
@@ -92,6 +76,7 @@ st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
+# FIXME: Attempts start at 1, which causes the game to lose one try and end early
 if "attempts" not in st.session_state:
     st.session_state.attempts = 1
 
@@ -131,11 +116,14 @@ with col2:
 with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
+
+# FIX: Refactored New Game reset logic into logic_utils.py with AI help to fully reset game state.
 if new_game:
-    st.session_state.attempts = 0
-    st.session_state.secret = random.randint(1, 100)
+    for key, value in new_game_state(low, high).items():
+        st.session_state[key] = value
     st.success("New game started.")
     st.rerun()
+
 
 if st.session_state.status != "playing":
     if st.session_state.status == "won":
@@ -144,6 +132,7 @@ if st.session_state.status != "playing":
         st.error("Game over. Start a new game to try again.")
     st.stop()
 
+# FIXME: Attempt count increases before the guess is fully processed
 if submit:
     st.session_state.attempts += 1
 
