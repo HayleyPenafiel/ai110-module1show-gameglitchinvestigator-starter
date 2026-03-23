@@ -1,6 +1,7 @@
 import random
 
 # FIX: Created with AI help to centralize New Game reset logic and respect difficulty range.
+# FIX: Updated attempts to start at 0 with AI help to fix the off-by-one error
 def new_game_state(low: int, high: int) -> dict:
     """Return a fresh session state dict for a new game."""
     return {
