@@ -26,7 +26,7 @@ def test_guess_too_low():
 
 def test_new_game_state_resets_correctly():
     state = new_game_state(1, 20)
-    assert state["attempts"] == 1
+    assert state["attempts"] == 0
     assert state["score"] == 0
     assert state["status"] == "playing"
     assert state["history"] == []
