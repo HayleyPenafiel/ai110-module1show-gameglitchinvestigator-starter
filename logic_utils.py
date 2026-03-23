@@ -4,7 +4,7 @@ import random
 def new_game_state(low: int, high: int) -> dict:
     """Return a fresh session state dict for a new game."""
     return {
-        "attempts": 1,
+        "attempts": 0,
         "secret": random.randint(low, high),
         "score": 0,
         "status": "playing",
@@ -25,7 +25,7 @@ def parse_guess(raw: str):
     """
     raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
 
-
+# FIX: Corrected hint direction logic using AI
 def check_guess(guess, secret):
     """
     Compare guess to secret and return (outcome, message).

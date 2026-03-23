@@ -76,9 +76,8 @@ st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
-# FIXME: Attempts start at 1, which causes the game to lose one try and end early
 if "attempts" not in st.session_state:
-    st.session_state.attempts = 1
+    st.session_state.attempts = 0
 
 if "score" not in st.session_state:
     st.session_state.score = 0
@@ -132,7 +131,6 @@ if st.session_state.status != "playing":
         st.error("Game over. Start a new game to try again.")
     st.stop()
 
-# FIXME: Attempt count increases before the guess is fully processed
 if submit:
     st.session_state.attempts += 1
 
